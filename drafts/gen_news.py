@@ -325,6 +325,7 @@ TPL = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../css/style.css">
 <title>{title} | 滴水湖房产网</title>
 <meta name="description" content="{desc}">
 <meta name="keywords" content="{kw}">

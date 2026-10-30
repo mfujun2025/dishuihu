@@ -171,12 +171,18 @@ function escapeHtml(s) {
 
 /* ---------- 页头注入 ---------- */
 function injectHead() {
-  const head = document.createElement("link");
-  head.rel = "stylesheet";
-  head.href = "css/style.css";
-  document.head.appendChild(head);
+  /* 基于 common.js 自身位置解析，确保根目录与 articles/ 子目录都能正确加载 */
+  const base = (document.currentScript && document.currentScript.src) || location.href;
+  const dir = base.substring(0, base.lastIndexOf("/") + 1); // .../js/
+  /* 页面已显式引用样式表则跳过，避免重复加载 */
+  if (!document.querySelector('link[href$="style.css"]')) {
+    const head = document.createElement("link");
+    head.rel = "stylesheet";
+    head.href = dir + "../css/style.css";
+    document.head.appendChild(head);
+  }
   const foot = document.createElement("script");
-  foot.src = "js/data.js";
+  foot.src = dir + "data.js";
   document.head.appendChild(foot);
 }
 

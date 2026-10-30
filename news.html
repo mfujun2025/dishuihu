@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>新闻中心 | 滴水湖房产网 - 临港新片区房产资讯、政策解读、置业攻略</title>
+<meta name="description" content="滴水湖房产新闻中心：临港新片区限购政策解读、滴水湖房价走势分析、二手房交易流程攻略、租房指南、学区房解析、海景房置业分析，专业房产资讯助您安心置业。">
+<meta name="keywords" content="滴水湖新闻,临港新片区政策,临港限购,滴水湖房价,二手房交易流程,滴水湖租房,学区房,海景房">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsAPISectionPage",
+  "name": "滴水湖房产新闻中心",
+  "description": "临港新片区房产资讯、政策解读与置业攻略",
+  "url": "https://mfujun2025.github.io/dishuihu/news.html",
+  "publisher": { "@type": "Organization", "name": "滴水湖房产", "url": "https://mfujun2025.github.io/dishuihu/" }
+}
+</script>
+</head>
+<body>
+<header id="site-header"></header>
+
+<div class="container">
+  <div class="breadcrumb"><a href="index.html">首页</a><span>/</span>新闻中心</div>
+</div>
+
+<section class="section" style="padding-top:18px">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">NEWS CENTER</div>
+      <h2>新闻中心 · 置业资讯</h2>
+      <p>临港新片区政策解读、市场分析、交易攻略，专业内容助您安心买房卖房</p>
+    </div>
+
+    <div class="news-filter" id="newsFilter" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:32px"></div>
+    <div class="house-grid" id="newsGrid"></div>
+  </div>
+</section>
+
+<footer id="site-footer"></footer>
+
+<style>
+.news-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:var(--shadow);transition:transform .22s,box-shadow .22s;display:flex;flex-direction:column}
+.news-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.news-thumb{aspect-ratio:16/9;background:var(--lake-200)}
+.news-thumb img{width:100%;height:100%;object-fit:cover}
+.news-cat{display:inline-block;font-size:12px;font-weight:700;color:var(--lake-700);background:var(--lake-100);border:1px solid var(--lake-200);padding:3px 10px;border-radius:6px;margin:14px 0 0 16px}
+.news-body{padding:0 16px 18px;flex:1;display:flex;flex-direction:column}
+.news-card h3{font-size:16px;color:var(--lake-900);line-height:1.5;margin-top:10px}
+.news-card:hover h3{color:var(--lake-700)}
+.news-card p{font-size:13px;color:var(--ink-2);margin-top:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.news-meta{display:flex;gap:12px;margin-top:auto;padding-top:12px;font-size:12.5px;color:var(--ink-3)}
+</style>
+
+<script src="js/common.js"></script>
+<script>
+initPage("news");
+
+/* 新闻数据：标题、分类、摘要、正文文件、日期 */
+const NEWS = [
+  { id: 1, title: "2026年滴水湖买房攻略：临港新片区置业全流程指南", cat: "置业攻略", date: "2026-10-28", file: "articles/dishuihu-fangwu-gonglue.html", desc: "预算、资格、选房、贷款、过户全流程拆解，首次置业临港必看。" },
+  { id: 2, title: "临港新片区限购政策详解：外地人能在滴水湖买房吗？", cat: "政策解读", date: "2026-10-25", file: "articles/lingang-gouxian-zhengce.html", desc: "社保年限、人才引进、首套二套认定，一文看懂临港购房资格。" },
+  { id: 3, title: "滴水湖二手房交易流程：从看房到过户的完整指南", cat: "交易指南", date: "2026-10-22", file: "articles/dishuihu-ershoufang-liucheng.html", desc: "签约、网签、资金监管、贷款、过户每一步要点与避坑提示。" },
+  { id: 4, title: "临港新片区房价走势分析：滴水湖板块还有升值空间吗？", cat: "市场分析", date: "2026-10-20", file: "articles/dishuihu-fangjia-zoushi.html", desc: "从交通、产业、人口三维度分析滴水湖房价走势与置业窗口期。" },
+  { id: 5, title: "滴水湖租房指南：地铁16号线沿线高性价比租房攻略", cat: "租房指南", date: "2026-10-15", file: "articles/dishuihu-zufang-gonglue.html", desc: "滴水湖、临港大道、芦潮港各板块租金对比与租房防骗技巧。" },
+  { id: 6, title: "上海中学东校周边学区房：临港教育配套全解析", cat: "学区房", date: "2026-10-12", file: "articles/shanghai-zhongxue-dongxiao-xuequfang.html", desc: "临港新片区学校清单、学区划分规则与学区房选购建议。" },
+  { id: 7, title: "滴水湖改善置业指南：三房四房怎么选？", cat: "置业攻略", date: "2026-10-08", file: "articles/dishuihu-gaijin-zhiyuan.html", desc: "户型、楼层、朝向、小区对比，改善置换的六个决策要点。" },
+  { id: 8, title: "南汇嘴海景房值得买吗？滨海置业优缺点全分析", cat: "市场分析", date: "2026-10-05", file: "articles/nanhuizer-haijingfang.html", desc: "景观、配套、流动性与持有成本，海景房投资前必读。" }
+];
+
+const CATS = ["全部", "置业攻略", "政策解读", "交易指南", "市场分析", "租房指南", "学区房"];
+const filter = document.getElementById("newsFilter");
+filter.innerHTML = CATS.map((c, i) => `<button data-c="${c}" class="${i === 0 ? "on" : ""}">${c}</button>`).join("");
+filter.style.cssText = "display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:32px";
+filter.querySelectorAll("button").forEach(btn => btn.addEventListener("click", () => {
+  filter.querySelectorAll("button").forEach(b => b.classList.remove("on"));
+  btn.classList.add("on");
+  renderNews(btn.dataset.c);
+}));
+filter.querySelectorAll("button").forEach(b => { b.style.cssText = "padding:7px 16px;border-radius:999px;border:1.5px solid var(--line);background:#fff;cursor:pointer;font-size:14px;font-family:inherit;color:var(--ink-2)"; });
+filter.querySelectorAll("button.on").forEach(b => { b.style.cssText += "background:var(--lake-600);border-color:var(--lake-600);color:#fff"; });
+
+function renderNews(cat) {
+  const list = cat === "全部" ? NEWS : NEWS.filter(n => n.cat === cat);
+  document.getElementById("newsGrid").innerHTML = list.map(n => `
+    <a class="news-card" href="${n.file}">
+      <div class="news-thumb"><img src="${svgImage("news-" + n.id, "资讯", n.cat)}" alt="${n.title}" loading="lazy"></div>
+      <span class="news-cat">${n.cat}</span>
+      <div class="news-body">
+        <h3>${n.title}</h3>
+        <p>${n.desc}</p>
+        <div class="news-meta"><span>📅 ${n.date}</span><span>💬 点击阅读全文</span></div>
+      </div>
+    </a>`).join("");
+}
+renderNews("全部");
+</script>
+</body>
+</html>

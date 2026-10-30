@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>发布房源 | 滴水湖房产网 - 业主直售/委托出售通道</title>
+<meta name="description" content="业主或经纪人免费发布房源：填写房源信息提交后推送至滴水湖房产审核，审核通过即上线展示。委托出售、业主直售一站式服务。">
+</head>
+<body>
+<header id="site-header"></header>
+
+<div class="container">
+  <div class="breadcrumb"><a href="index.html">首页</a><span>/</span>发布房源</div>
+</div>
+
+<section class="section" style="padding-top:18px">
+  <div class="container">
+    <div class="booking-layout">
+      <!-- 表单 -->
+      <div class="booking-card">
+        <h2>发布房源 · 委托出售</h2>
+        <p class="tip">* 为必填项。提交后房源信息将推送至滴水湖房产审核，<b>审核通过即上线展示</b>，全程免费。请勿填写虚假信息。</p>
+        <div class="form-success" id="submitSuccess">✅ 房源提交成功！已推送至审核通道，审核通过后将在网站上线展示，并短信/电话通知您。</div>
+        <div class="form-success" id="submitError" style="display:none;background:#fdecea;border-color:#f5c6c2;color:var(--danger)"></div>
+        <form id="submitForm" novalidate>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label>房源标题 <span class="req">*</span></label>
+              <input class="form-control" type="text" name="title" placeholder="如：滴水湖观湖景 三房两厅 南北通透" required>
+              <span class="err" data-for="title" style="color:var(--danger);font-size:13px"></span>
+            </div>
+            <div class="form-group">
+              <label>小区名称 <span class="req">*</span></label>
+              <input class="form-control" type="text" name="community" placeholder="如：滴水湖馨苑" required>
+            </div>
+            <div class="form-group">
+              <label>板块区域 <span class="req">*</span></label>
+              <select class="form-control" name="district" required>
+                <option value="">请选择板块</option>
+                <option>滴水湖</option>
+                <option>临港主城区</option>
+                <option>芦潮港</option>
+                <option>南汇嘴</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>总价（万元） <span class="req">*</span></label>
+              <input class="form-control" type="number" name="price" placeholder="如：368" min="1" required>
+            </div>
+            <div class="form-group">
+              <label>面积（㎡） <span class="req">*</span></label>
+              <input class="form-control" type="number" name="area" placeholder="如：95" min="1" step="0.1" required>
+            </div>
+            <div class="form-group">
+              <label>户型 <span class="req">*</span></label>
+              <select class="form-control" name="layout" required>
+                <option value="">请选择户型</option>
+                <option>1室1厅</option><option>2室1厅</option><option>2室2厅</option>
+                <option>3室2厅</option><option>4室2厅</option><option>5室以上</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>楼层 <span class="req">*</span></label>
+              <input class="form-control" type="text" name="floor" placeholder="如：中层/18层" required>
+            </div>
+            <div class="form-group">
+              <label>朝向 <span class="req">*</span></label>
+              <select class="form-control" name="orientation" required>
+                <option value="">请选择朝向</option>
+                <option>南</option><option>南北</option><option>朝南</option><option>东</option><option>西</option><option>北</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>房源类型</label>
+              <select class="form-control" name="type">
+                <option value="住宅">住宅</option>
+                <option value="公寓">公寓</option>
+                <option value="复式">复式</option>
+                <option value="别墅">别墅</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label>房源标签（逗号分隔）</label>
+              <input class="form-control" type="text" name="tags" placeholder="如：湖景房,满五唯一,近地铁,送家具家电">
+            </div>
+            <div class="form-group full">
+              <label>房源描述 <span class="req">*</span></label>
+              <textarea class="form-control" name="desc" placeholder="房屋亮点、装修情况、产权情况、看房时间等，建议50字以上" required></textarea>
+              <span class="err" data-for="desc" style="color:var(--danger);font-size:13px"></span>
+            </div>
+            <div class="form-group">
+              <label>联系人 <span class="req">*</span></label>
+              <input class="form-control" type="text" name="contact" placeholder="您的称呼" required>
+            </div>
+            <div class="form-group">
+              <label>联系电话 <span class="req">*</span></label>
+              <input class="form-control" type="tel" name="phone" placeholder="11 位手机号" maxlength="11" required>
+              <span class="err" data-for="phone" style="color:var(--danger);font-size:13px"></span>
+            </div>
+            <div class="form-group full">
+              <label>委托方式</label>
+              <select class="form-control" name="channel">
+                <option value="业主直售">业主直售（自己出售）</option>
+                <option value="委托中介">委托中介代售</option>
+                <option value="经纪人">经纪人合作房源</option>
+              </select>
+            </div>
+          </div>
+          <p class="form-note" style="margin:16px 0">提交即表示您确认房源信息真实有效，并同意滴水湖房产审核后在网站公开展示您的联系方式。</p>
+          <button class="btn btn-primary btn-block" type="submit" style="margin-top:8px">提交房源 · 等待审核</button>
+        </form>
+      </div>
+
+      <!-- 侧栏 -->
+      <aside class="booking-side">
+        <div class="side-card">
+          <h4>📋 发布流程</h4>
+          <p>1️⃣ 填写房源信息提交</p>
+          <p>2️⃣ 推送至滴水湖房产审核通道</p>
+          <p>3️⃣ 审核通过即上线展示</p>
+          <p>4️⃣ 买家咨询自动对接</p>
+        </div>
+        <div class="side-card">
+          <h4>📞 需要帮助？</h4>
+          <p>发布或委托出售咨询：</p>
+          <p style="font-size:20px;font-weight:800;color:var(--lake-700);margin:8px 0">021-5896-1888</p>
+          <p style="margin-top:8px">全年无休 8:30 - 20:00</p>
+        </div>
+        <div class="side-card">
+          <h4>💡 提高通过率</h4>
+          <p>• 标题突出亮点（湖景/地铁/满五唯一）</p>
+          <p>• 描述写清装修与产权情况</p>
+          <p>• 价格参考同小区挂牌价</p>
+          <p>• 上传真实图片（审核更快）</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<footer id="site-footer"></footer>
+
+<script src="js/common.js"></script>
+<script>
+initPage("");
+
+/* 飞书审核推送 */
+const FEISHU_WEBHOOK = "https://open.feishu.cn/open-apis/bot/v2/hook/59215fd8-9c77-40c5-949f-48104f448c64";
+const form = document.getElementById("submitForm");
+const success = document.getElementById("submitSuccess");
+const errorBox = document.getElementById("submitError");
+
+function setError(name, msg) {
+  document.querySelector(`.err[data-for=${name}]`).textContent = msg || "";
+  form.querySelector(`[name=${name}]`).style.borderColor = msg ? "var(--danger)" : "";
+}
+
+function buildCard(d) {
+  const now = new Date();
+  const pad = n => String(n).padStart(2, "0");
+  const stamp = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  return {
+    msg_type: "interactive",
+    card: {
+      header: {
+        title: { tag: "plain_text", content: "🏠 新房源提交审核 · 滴水湖房产网" },
+        template: "orange"
+      },
+      elements: [
+        { tag: "div", fields: [
+          { is_short: true, text: { tag: "lark_md", content: "**总价**\n" + d.price + " 万" } },
+          { is_short: true, text: { tag: "lark_md", content: "**面积**\n" + d.area + " ㎡" } },
+          { is_short: true, text: { tag: "lark_md", content: "**户型**\n" + d.layout } },
+          { is_short: true, text: { tag: "lark_md", content: "**楼层**\n" + d.floor } },
+          { is_short: true, text: { tag: "lark_md", content: "**朝向**\n" + d.orientation } },
+          { is_short: true, text: { tag: "lark_md", content: "**类型**\n" + d.type } }
+        ]},
+        { tag: "div", text: { tag: "lark_md", content: "**小区**：" + d.community + "（" + d.district + "）\n**标题**：" + d.title + "\n**标签**：" + (d.tags || "无") + "\n**委托方式**：" + d.channel } },
+        { tag: "div", text: { tag: "lark_md", content: "**房源描述**：" + d.desc } },
+        { tag: "div", text: { tag: "lark_md", content: "**联系人**：" + d.contact + "\n**电话**：" + d.phone } },
+        { tag: "hr" },
+        { tag: "note", elements: [{ tag: "plain_text", content: "提交时间：" + stamp + " ｜ 来源：滴水湖.cn 发布房源页" }] }
+      ]
+    }
+  };
+}
+
+async function pushToFeishu(data) {
+  const res = await fetch(FEISHU_WEBHOOK, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(buildCard(data))
+  });
+  if (!res.ok) throw new Error("HTTP " + res.status);
+  const json = await res.json();
+  if (json.code !== 0) throw new Error(json.msg || "飞书推送失败");
+  return true;
+}
+
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+  const f = new FormData(form);
+  const data = {
+    title: (f.get("title") || "").trim(),
+    community: (f.get("community") || "").trim(),
+    district: f.get("district") || "",
+    price: f.get("price") || "",
+    area: f.get("area") || "",
+    layout: f.get("layout") || "",
+    floor: (f.get("floor") || "").trim(),
+    orientation: f.get("orientation") || "",
+    type: f.get("type") || "住宅",
+    tags: (f.get("tags") || "").trim(),
+    desc: (f.get("desc") || "").trim(),
+    contact: (f.get("contact") || "").trim(),
+    phone: (f.get("phone") || "").trim(),
+    channel: f.get("channel") || "业主直售"
+  };
+
+  let ok = true;
+  if (data.title.length < 5) { setError("title", "标题至少5个字"); ok = false; } else setError("title", "");
+  if (!data.community) { setError("community", "请填写小区名称"); ok = false; } else setError("community", "");
+  if (!data.district) { setError("district", "请选择板块"); ok = false; } else setError("district", "");
+  if (!data.price || parseFloat(data.price) <= 0) { setError("price", "请填写正确总价"); ok = false; } else setError("price", "");
+  if (!data.area || parseFloat(data.area) <= 0) { setError("area", "请填写正确面积"); ok = false; } else setError("area", "");
+  if (!data.layout) { setError("layout", "请选择户型"); ok = false; } else setError("layout", "");
+  if (!data.floor) { setError("floor", "请填写楼层"); ok = false; } else setError("floor", "");
+  if (!data.orientation) { setError("orientation", "请选择朝向"); ok = false; } else setError("orientation", "");
+  if (data.desc.length < 20) { setError("desc", "描述至少20个字"); ok = false; } else setError("desc", "");
+  if (!/^1[3-9]\d{9}$/.test(data.phone)) { setError("phone", "请输入正确的 11 位手机号"); ok = false; } else setError("phone", "");
+  if (!ok) {
+    form.querySelector(".err:not(:empty)").closest(".form-group").querySelector(".form-control").focus();
+    return;
+  }
+
+  const btn = form.querySelector('button[type=submit]');
+  btn.disabled = true;
+  btn.textContent = "正在提交审核…";
+  try {
+    await pushToFeishu(data);
+    success.classList.add("show");
+    form.querySelectorAll("input,select,textarea").forEach(el => el.value = "");
+    setTimeout(() => success.scrollIntoView({ behavior: "smooth", block: "center" }), 50);
+  } catch (err) {
+    errorBox.style.display = "block";
+    errorBox.textContent = "⚠️ 提交失败（" + (err.message || "网络异常") + "）。请稍后重试，或直接拨打 021-5896-1888 发布房源。";
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "提交房源 · 等待审核";
+  }
+});
+</script>
+</body>
+</html>

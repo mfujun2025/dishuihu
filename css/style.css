@@ -354,6 +354,32 @@ textarea.form-control{min-height:110px;resize:vertical}
 .contact-info .k{font-size:12.5px;color:var(--ink-3)}
 .contact-info .v{font-weight:600;color:var(--ink)}
 
+/* ===== 新闻文章页 ===== */
+.news-hero{border-radius:14px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:24px;aspect-ratio:16/7;background:var(--lake-200)}
+.news-hero img{width:100%;height:100%;object-fit:cover}
+.article-card-pad{background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:40px;max-width:860px;margin:0 auto}
+.article-cat{display:inline-block;font-size:13px;font-weight:700;color:var(--lake-700);background:var(--lake-100);border:1px solid var(--lake-200);padding:4px 12px;border-radius:6px}
+.article-title{font-size:28px;font-weight:800;color:var(--lake-900);line-height:1.4;margin:14px 0 12px}
+.article-meta{display:flex;flex-wrap:wrap;gap:16px;font-size:13.5px;color:var(--ink-3);padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:24px}
+.article-body{font-size:15.5px;color:var(--ink);line-height:1.9}
+.article-body h2{font-size:20px;color:var(--lake-900);margin:32px 0 14px;padding-left:12px;border-left:4px solid var(--lake-400)}
+.article-body p{margin-bottom:16px}
+.article-body ul,.article-body ol{margin:0 0 16px 24px}
+.article-body li{margin-bottom:8px}
+.article-body strong{color:var(--lake-700)}
+.article-body .tip-box{background:var(--lake-100);border:1px solid var(--lake-200);border-radius:10px;padding:16px 18px;margin:20px 0}
+.article-body .tip-box b{color:var(--lake-700)}
+.article-share{display:flex;gap:10px;flex-wrap:wrap;margin:30px 0}
+.article-share .btn{padding:9px 18px;font-size:14px}
+.article-nav{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:26px 0}
+.article-nav a{font-size:14px;color:var(--lake-600);font-weight:600}
+.article-nav span{font-size:13px;color:var(--ink-3)}
+@media (max-width:640px){
+  .article-card-pad{padding:22px 18px}
+  .article-title{font-size:21px}
+  .article-body{font-size:14.5px;line-height:1.8}
+}
+
 /* ===== 移动端适配 ===== */
 @media (max-width:1024px){
   .house-grid{grid-template-columns:repeat(2,1fr)}

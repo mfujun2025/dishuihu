@@ -40,6 +40,8 @@ function renderNav(active) {
     ["index.html", "首页", "home"],
     ["listings.html", "在售房源", "listings"],
     ["stores.html", "门店与经纪人", "stores"],
+    ["news.html", "新闻中心", "news"],
+    ["submit.html", "发布房源", "submit"],
     ["booking.html", "预约看房", "booking"],
     ["contact.html", "联系我们", "contact"]
   ];
@@ -76,6 +78,8 @@ function renderFooter() {
             <li><a href="index.html">首页</a></li>
             <li><a href="listings.html">在售房源</a></li>
             <li><a href="stores.html">门店与经纪人</a></li>
+            <li><a href="news.html">新闻中心</a></li>
+            <li><a href="submit.html">发布房源</a></li>
             <li><a href="booking.html">预约看房</a></li>
           </ul>
         </div>

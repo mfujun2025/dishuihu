@@ -3,6 +3,36 @@
 
 const PROPERTIES = [
   {
+    id: 13,
+    title: "临港大道精装三房 南北通透 近地铁送家具家电",
+    community: "临港悦城",
+    district: "临港主城区",
+    price: 288,
+    unitPrice: 31304,
+    area: 92,
+    layout: "3室2厅",
+    rooms: 3,
+    floor: "中层/18层",
+    totalFloor: 18,
+    orientation: "南北",
+    type: "住宅",
+    tags: ["近地铁", "精装修", "送家具家电", "满五唯一"],
+    desc: "临港悦城电梯高层三房，南北双阳台全明格局，业主自住精装修保养好，品牌家具家电全送，拎包入住。近地铁16号线临港大道站500米，配套成熟，看房随时。",
+    images: ["home-1", "home-5", "home-4", "home-6"],
+    layoutImg: "layout-3",
+    facilities: ["临港幼教", "临港外国语小学", "上海中学东校", "六院东院", "临港大道站", "临港天地商业中心", "滨河公园"],
+    near: [
+      { name: "地铁16号线临港大道站", dist: "500米", icon: "🚇" },
+      { name: "滨河公园", dist: "400米", icon: "🌳" },
+      { name: "临港天地商业中心", dist: "650米", icon: "🛍️" },
+      { name: "临港外国语小学", dist: "900米", icon: "🎓" },
+      { name: "六院东院", dist: "2.1公里", icon: "🏥" },
+      { name: "滴水湖", dist: "2.2公里", icon: "🌊" }
+    ],
+    agent: 3,
+    featured: true
+  },
+  {
     id: 1,
     title: "滴水湖观湖景 三房两厅 南北通透 拎包入住",
     community: "滴水湖馨苑",

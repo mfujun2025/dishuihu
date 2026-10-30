@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>联系我们 | 滴水湖房产网 - 滴水湖.cn</title>
+<meta name="description" content="联系滴水湖房产：门店地址、电话、营业时间、微信咨询与在线留言，滴水湖旗舰店位于南汇新城镇滴水湖环湖西一路88号。">
+</head>
+<body>
+<header id="site-header"></header>
+
+<div class="container">
+  <div class="breadcrumb"><a href="index.html">首页</a><span>/</span>联系我们</div>
+</div>
+
+<section class="section" style="padding-top:18px">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">CONTACT US</div>
+      <h2>联系我们</h2>
+      <p>三家门店覆盖临港全域，全年无休，随时看房</p>
+    </div>
+
+    <div class="contact-grid">
+      <!-- 地图 + 门店 -->
+      <div>
+        <div class="map-embed">
+          <div style="text-align:center">
+            <div class="pin">📍</div>
+            <div style="font-weight:700;margin-top:10px">滴水湖旗舰店 · 环湖西一路 88 号</div>
+            <div style="font-size:13px;opacity:.75;margin-top:6px">南汇新城镇 · 滴水湖环湖区域</div>
+          </div>
+        </div>
+        <div class="contact-card" style="margin-top:20px">
+          <h2 style="font-size:20px;color:var(--lake-900)">门店一览</h2>
+          <ul class="contact-info" id="storeInfo"></ul>
+        </div>
+      </div>
+
+      <!-- 联系方式 + 留言 -->
+      <div>
+        <div class="contact-card">
+          <h2 style="font-size:20px;color:var(--lake-900);margin-bottom:16px">联系方式</h2>
+          <ul class="contact-info">
+            <li><div class="ic">📞</div><div><div class="k">门店电话</div><div class="v">021-5896-1888</div></div></li>
+            <li><div class="ic">📱</div><div><div class="k">店长手机（微信同号）</div><div class="v">138-1818-0001</div></div></li>
+            <li><div class="ic">📍</div><div><div class="k">旗舰店地址</div><div class="v">上海市浦东新区南汇新城镇滴水湖环湖西一路 88 号</div></div></li>
+            <li><div class="ic">🕐</div><div><div class="k">营业时间</div><div class="v">全年无休 8:30 - 20:00</div></div></li>
+            <li><div class="ic">🚇</div><div><div class="k">交通指引</div><div class="v">地铁16号线滴水湖站 2 号口步行约 10 分钟</div></div></li>
+            <li><div class="ic">💬</div><div><div class="k">微信咨询</div><div class="v">添加 138-1818-0001 或点击右下角在线咨询</div></div></li>
+          </ul>
+          <a class="btn btn-primary btn-block" style="margin-top:16px" href="booking.html">立即预约看房</a>
+        </div>
+
+        <div class="contact-card" style="margin-top:20px">
+          <h2 style="font-size:20px;color:var(--lake-900);margin-bottom:6px">在线留言</h2>
+          <p style="font-size:13.5px;color:var(--ink-3);margin-bottom:18px">填写留言，我们会在 1 小时内回复</p>
+          <div class="form-success" id="msgSuccess" style="display:none">✅ 留言成功！我们会尽快与您联系。</div>
+          <form id="msgForm" novalidate>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>姓名 <span class="req">*</span></label>
+                <input class="form-control" type="text" name="name" placeholder="您的称呼" required>
+              </div>
+              <div class="form-group">
+                <label>手机 <span class="req">*</span></label>
+                <input class="form-control" type="tel" name="phone" placeholder="11 位手机号" maxlength="11" required>
+              </div>
+              <div class="form-group full">
+                <label>留言内容 <span class="req">*</span></label>
+                <textarea class="form-control" name="content" placeholder="请描述您的需求，如买房、卖房、租房、政策咨询等" required></textarea>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-block" type="submit" style="margin-top:14px">提交留言</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="site-footer"></footer>
+
+<script src="js/common.js"></script>
+<script>
+initPage("contact");
+
+document.getElementById("storeInfo").innerHTML = STORES.map(s => `
+  <li><div class="ic">🏠</div>
+  <div>
+    <div class="k">${s.name} ｜ ${s.hours}</div>
+    <div class="v">${s.address}</div>
+    <div class="v" style="font-weight:400;color:var(--lake-600);font-size:13.5px">📞 ${s.phone}</div>
+  </div></li>`).join("");
+
+/* 留言表单（同样推送到飞书） */
+const FEISHU_WEBHOOK = "https://open.feishu.cn/open-apis/bot/v2/hook/59215fd8-9c77-40c5-949f-48104f448c64";
+const msgForm = document.getElementById("msgForm");
+const msgSuccess = document.getElementById("msgSuccess");
+msgForm.addEventListener("submit", async e => {
+  e.preventDefault();
+  const f = new FormData(msgForm);
+  const name = (f.get("name") || "").trim();
+  const phone = (f.get("phone") || "").trim();
+  const content = (f.get("content") || "").trim();
+  if (name.length < 2 || !/^1[3-9]\d{9}$/.test(phone) || content.length < 5) {
+    alert("请填写完整的姓名、手机号与留言内容（不少于5个字）");
+    return;
+  }
+  const btn = msgForm.querySelector('button[type=submit]');
+  btn.disabled = true;
+  btn.textContent = "正在提交…";
+  const now = new Date();
+  const pad = n => String(n).padStart(2, "0");
+  const stamp = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  try {
+    const res = await fetch(FEISHU_WEBHOOK, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        msg_type: "interactive",
+        card: {
+          header: { title: { tag: "plain_text", content: "📩 网站新留言 · 滴水湖房产网" }, template: "blue" },
+          elements: [
+            { tag: "div", text: { tag: "lark_md", content: "**姓名**：" + name + "\n**手机号**：" + phone + "\n**内容**：" + content } },
+            { tag: "note", elements: [{ tag: "plain_text", content: "提交时间：" + stamp + " ｜ 来源：滴水湖.cn 联系我们页" }] }
+          ]
+        }
+      })
+    });
+    const json = await res.json();
+    if (json.code !== 0) throw new Error(json.msg || "推送失败");
+    msgSuccess.style.display = "block";
+    msgForm.reset();
+    setTimeout(() => msgSuccess.scrollIntoView({ behavior: "smooth", block: "center" }), 50);
+  } catch (err) {
+    alert("留言提交失败：" + (err.message || "网络异常") + "，请直接拨打 021-5896-1888");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "提交留言";
+  }
+});
+</script>
+</body>
+</html>

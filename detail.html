@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>房源详情 | 滴水湖房产网</title>
+<meta name="description" content="滴水湖周边二手房源详情：户型图、周边配套、价格信息与中介联系方式，预约看房便捷。">
+</head>
+<body>
+<header id="site-header"></header>
+
+<div class="container">
+  <div class="breadcrumb"><a href="index.html">首页</a><span>/</span><a href="listings.html">在售房源</a><span>/</span>房源详情</div>
+</div>
+
+<section class="section" style="padding-top:14px">
+  <div class="container" id="detailRoot"></div>
+</section>
+
+<footer id="site-footer"></footer>
+
+<script src="js/common.js"></script>
+<script>
+initPage("listings");
+
+const id = parseInt(new URLSearchParams(location.search).get("id")) || 1;
+const p = PROPERTIES.find(x => x.id === id) || PROPERTIES[0];
+const agent = AGENTS.find(a => a.id === p.agent);
+
+/* ---- 图片画廊 ---- */
+let galleryIndex = 0;
+function galleryHtml() {
+  return `
+  <div class="detail-gallery" id="gallery">
+    <img src="${svgImage(p.images[galleryIndex], p.community, "实景图 " + (galleryIndex + 1) + "/" + p.images.length)}" alt="${p.title}">
+    <button class="g-arrow g-prev" id="gPrev" aria-label="上一张">‹</button>
+    <button class="g-arrow g-next" id="gNext" aria-label="下一张">›</button>
+    <div class="gallery-dots" id="gDots">${p.images.map((_, i) => `<i data-i="${i}" class="${i === galleryIndex ? "on" : ""}"></i>`).join("")}</div>
+  </div>`;
+}
+function showImage(i) {
+  galleryIndex = (i + p.images.length) % p.images.length;
+  const img = document.querySelector("#gallery img");
+  img.style.opacity = 0;
+  setTimeout(() => {
+    img.src = svgImage(p.images[galleryIndex], p.community, "实景图 " + (galleryIndex + 1) + "/" + p.images.length);
+    img.style.opacity = 1;
+  }, 200);
+  document.querySelectorAll("#gDots i").forEach((d, di) => d.className = di === galleryIndex ? "on" : "");
+}
+
+/* ---- 主内容 ---- */
+document.getElementById("detailRoot").innerHTML = `
+  <div class="two-col" style="grid-template-columns:1fr">
+    <div>
+      ${galleryHtml()}
+
+      <div class="detail-info">
+        <div class="detail-tags">
+          <i>${p.district}</i><i>${p.community}</i><i>${p.type}</i>
+        </div>
+        <h1 class="detail-title">${p.title}</h1>
+        <div class="detail-price">
+          <span class="big">${p.price} 万</span>
+          <span class="unit">单价 ${p.unitPrice.toLocaleString()} 元/㎡ ｜ 总价可议，诚心出售</span>
+        </div>
+        <div class="detail-attrs">
+          <div class="attr"><div class="l">建筑面积</div><div class="v">${p.area} ㎡</div></div>
+          <div class="attr"><div class="l">户型</div><div class="v">${p.layout}</div></div>
+          <div class="attr"><div class="l">楼层</div><div class="v">${p.floor}</div></div>
+          <div class="attr"><div class="l">朝向</div><div class="v">${p.orientation}</div></div>
+          <div class="attr"><div class="l">小区</div><div class="v">${p.community}</div></div>
+          <div class="attr"><div class="l">板块</div><div class="v">${p.district}</div></div>
+          <div class="attr"><div class="l">类型</div><div class="v">${p.type}</div></div>
+          <div class="attr"><div class="l">看房</div><div class="v">随时可约</div></div>
+        </div>
+        <div class="detail-tags">${p.tags.map(t => `<i>${t}</i>`).join("")}</div>
+        <p class="detail-desc">${p.desc}</p>
+      </div>
+
+      <div class="detail-bar">
+        <span class="price-inline">${p.price} 万</span>
+        <a class="btn btn-gold" href="booking.html?id=${p.id}">预约看房</a>
+        <a class="btn btn-primary" href="#consult" onclick="document.getElementById('consult-widget').querySelector('.cw-fab').click();return false;">在线咨询</a>
+      </div>
+    </div>
+
+    <!-- 户型图 + 周边配套 -->
+    <div>
+      <div class="layout-section">
+        <h2>📐 户型图</h2>
+        <div class="layout-img"><img src="${svgImage(p.layoutImg, p.layout + " 户型图", p.layout + " · " + p.area + "㎡")}" alt="户型图"></div>
+        <ul style="margin-top:14px;font-size:14px;color:var(--ink-2);line-height:2">
+          <li>✔ 户型方正，全明格局，采光通风俱佳</li>
+          <li>✔ ${p.layout} 设计，满足 ${p.rooms} 口之家居住需求</li>
+          <li>✔ ${p.orientation}朝向，冬暖夏凉</li>
+        </ul>
+      </div>
+
+      <div class="layout-section">
+        <h2>🏫 周边教育医疗</h2>
+        <div class="facility-list">${p.facilities.map(f => `<div class="f"><span>🎓</span>${f}</div>`).join("")}</div>
+      </div>
+
+      <div class="layout-section">
+        <h2>📍 周边配套设施</h2>
+        <div class="near-list">${p.near.map(n => `
+          <div class="n"><div class="ic">${n.icon}</div>
+          <div><div class="nm">${n.name}</div><div class="ds">距 ${n.dist}</div></div></div>`).join("")}</div>
+      </div>
+
+      <div class="layout-section">
+        <h2>🤝 您的专属经纪人</h2>
+        <div class="agent-panel">
+          <div class="av">${agent.name.slice(-2)}</div>
+          <div style="flex:1">
+            <h4>${agent.name} · ${agent.title}</h4>
+            <p>${agent.experience} ｜ ${agent.specialty} ｜ ${agent.deals} ｜ ⭐ ${agent.rating}</p>
+            <p style="margin-top:6px">📞 ${agent.phone} ｜ 服务区域：${agent.area}</p>
+            <div class="acts">
+              <a class="btn btn-primary" style="padding:8px 16px;font-size:13px" href="booking.html?id=${p.id}&agent=${agent.id}">预约该经纪人</a>
+              <a class="btn btn-outline" style="padding:8px 16px;font-size:13px" href="tel:${agent.phone.replace(/-/g,"")}">电话咨询</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 相关房源 -->
+  <div class="layout-section" style="margin-top:34px">
+    <h2>🏠 同板块相似房源</h2>
+    <div class="house-grid">${relatedHtml()}</div>
+  </div>`;
+
+function relatedHtml() {
+  return PROPERTIES.filter(x => x.id !== p.id && x.district === p.district).slice(0, 4)
+    .concat(PROPERTIES.filter(x => x.id !== p.id && x.district !== p.district).slice(0, 4 - PROPERTIES.filter(x => x.id !== p.id && x.district === p.district).length))
+    .slice(0, 4).map(x => `
+    <a class="house-card" href="detail.html?id=${x.id}">
+      <div class="house-thumb">
+        <img src="${svgImage(x.images[0], x.community, x.layout)}" alt="${x.title}" loading="lazy">
+        <span class="house-badge ${x.tags[0].indexOf("湖") >= 0 || x.tags[0].indexOf("海") >= 0 ? "" : "blue"}">${x.tags[0]}</span>
+        <div class="house-price"><b>${x.price}万</b> <span class="unit">｜ 单价 ${x.unitPrice.toLocaleString()} 元/㎡</span></div>
+      </div>
+      <div class="house-body">
+        <div class="house-title">${x.title}</div>
+        <div class="house-meta"><span>📐 ${x.area}㎡</span><span>🚪 ${x.layout}</span><span>🏢 ${x.floor}</span></div>
+        <div class="house-tags">${x.tags.slice(0, 3).map(t => `<i>${t}</i>`).join("")}</div>
+      </div>
+    </a>`).join("");
+}
+
+/* 画廊事件 */
+document.getElementById("gPrev").addEventListener("click", () => showImage(galleryIndex - 1));
+document.getElementById("gNext").addEventListener("click", () => showImage(galleryIndex + 1));
+document.querySelectorAll("#gDots i").forEach(d => d.addEventListener("click", () => showImage(parseInt(d.dataset.i))));
+document.getElementById("gallery").addEventListener("click", e => {
+  if (e.target.closest(".g-arrow") || e.target.closest(".gallery-dots")) return;
+});
+document.title = p.title + " | 滴水湖房产网";
+const meta = document.createElement("meta");
+meta.name = "description";
+meta.content = `${p.community} ${p.layout} ${p.area}㎡，售价${p.price}万，单价${p.unitPrice}元/㎡。${p.desc.slice(0,60)}。`;
+document.head.appendChild(meta);
+</script>
+</body>
+</html>

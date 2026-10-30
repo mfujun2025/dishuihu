@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>预约看房 | 滴水湖房产网 - 免费预约看房表单</title>
+<meta name="description" content="在线预约看房：填写姓名、电话、意向房源与看房时间，滴水湖房产经纪人30分钟内与您确认。">
+</head>
+<body>
+<header id="site-header"></header>
+
+<div class="container">
+  <div class="breadcrumb"><a href="index.html">首页</a><span>/</span>预约看房</div>
+</div>
+
+<section class="section" style="padding-top:18px">
+  <div class="container">
+    <div class="booking-layout">
+      <!-- 表单 -->
+      <div class="booking-card">
+        <h2>预约看房</h2>
+        <p class="tip">* 为必填项。提交后经纪人将在 30 分钟内与您电话确认，请保持手机畅通。</p>
+        <div class="form-success" id="bookingSuccess">✅ 预约成功提交！专属经纪人将尽快与您联系确认看房时间。如需更快，请直接拨打 <b>021-5896-1888</b>。</div>
+        <div class="form-success" id="bookingError" style="display:none;background:#fdecea;border-color:#f5c6c2;color:var(--danger)"></div>
+        <form id="bookingForm" novalidate>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>姓名 <span class="req">*</span></label>
+              <input class="form-control" type="text" name="name" placeholder="请输入您的姓名" required>
+              <span class="err" data-for="name" style="color:var(--danger);font-size:13px"></span>
+            </div>
+            <div class="form-group">
+              <label>手机号 <span class="req">*</span></label>
+              <input class="form-control" type="tel" name="phone" placeholder="11 位手机号" maxlength="11" required>
+              <span class="err" data-for="phone" style="color:var(--danger);font-size:13px"></span>
+            </div>
+            <div class="form-group">
+              <label>意向房源</label>
+              <select class="form-control" name="property" id="selProperty">
+                <option value="">不限，帮我推荐</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>意向经纪人</label>
+              <select class="form-control" name="agent" id="selAgent">
+                <option value="">不限</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>看房时间 <span class="req">*</span></label>
+              <input class="form-control" type="date" name="date" required>
+              <span class="err" data-for="date" style="color:var(--danger);font-size:13px"></span>
+            </div>
+            <div class="form-group">
+              <label>看房时段 <span class="req">*</span></label>
+              <select class="form-control" name="time" required>
+                <option value="">请选择时段</option>
+                <option>上午 9:00 - 12:00</option>
+                <option>下午 13:00 - 17:00</option>
+                <option>晚上 18:00 - 20:00</option>
+              </select>
+              <span class="err" data-for="time" style="color:var(--danger);font-size:13px"></span>
+            </div>
+            <div class="form-group full">
+              <label>需求备注</label>
+              <textarea class="form-control" name="remark" placeholder="预算、户型、学区、通勤等需求，或直接留言给经纪人"></textarea>
+            </div>
+          </div>
+          <p class="form-note" style="margin:16px 0">提交即表示同意我们通过电话与您联系看房事宜，您的信息仅用于本次看房服务。</p>
+          <button class="btn btn-primary btn-block" type="submit" style="margin-top:8px">立即提交预约</button>
+        </form>
+      </div>
+
+      <!-- 侧栏 -->
+      <aside class="booking-side">
+        <div class="side-card">
+          <h4>📞 快速通道</h4>
+          <p>不想填表单？直接电话联系：</p>
+          <p style="font-size:20px;font-weight:800;color:var(--lake-700);margin:8px 0">021-5896-1888</p>
+          <p style="margin-top:8px">全年无休 8:30 - 20:00</p>
+          <a class="btn btn-gold btn-block" style="margin-top:12px" href="contact.html">查看门店地址</a>
+        </div>
+        <div class="side-card">
+          <h4>🔥 热门预约房源</h4>
+          <ul class="hot" id="hotList"></ul>
+        </div>
+        <div class="side-card">
+          <h4>💡 看房小贴士</h4>
+          <p>• 建议提前 1 天预约，便于经纪人安排钥匙</p>
+          <p>• 看房时可记录采光、噪音、楼层的实际情况</p>
+          <p>• 首套房资格、贷款额度问题可现场咨询经纪人</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<footer id="site-footer"></footer>
+
+<script src="js/common.js"></script>
+<script>
+initPage("booking");
+
+/* 渲染下拉选项与热门房源 */
+document.getElementById("selProperty").insertAdjacentHTML("beforeend",
+  PROPERTIES.map(x => `<option value="${x.id}">${x.community} ${x.layout} ${x.price}万（${x.district}）</option>`).join(""));
+document.getElementById("selAgent").insertAdjacentHTML("beforeend",
+  AGENTS.map(a => `<option value="${a.id}">${a.name}（${a.title}）</option>`).join(""));
+document.getElementById("hotList").innerHTML = PROPERTIES.filter(x => x.featured).slice(0, 4)
+  .map(x => `<li><a href="detail.html?id=${x.id}">${x.community} ${x.layout}</a><span>${x.price}万</span></li>`).join("");
+
+/* URL 参数预选 */
+(function () {
+  const q = new URLSearchParams(location.search);
+  if (q.get("id")) document.querySelector('[name=property]').value = q.get("id");
+  if (q.get("agent")) document.querySelector('[name=agent]').value = q.get("agent");
+})();
+
+/* 最小日期为明天 */
+const dateInput = document.querySelector('[name=date]');
+const tomorrow = new Date(Date.now() + 86400000);
+dateInput.min = tomorrow.toISOString().slice(0, 10);
+
+/* 校验与提交（提交到飞书机器人 webhook） */
+const form = document.getElementById("bookingForm");
+const success = document.getElementById("bookingSuccess");
+const errorBox = document.getElementById("bookingError");
+
+/* 飞书自定义机器人 webhook（如需更换在此修改） */
+const FEISHU_WEBHOOK = "https://open.feishu.cn/open-apis/bot/v2/hook/59215fd8-9c77-40c5-949f-48104f448c64";
+
+function setError(name, msg) {
+  document.querySelector(`.err[data-for=${name}]`).textContent = msg || "";
+  form.querySelector(`[name=${name}]`).style.borderColor = msg ? "var(--danger)" : "";
+}
+
+function propText(v) {
+  const x = PROPERTIES.find(p => String(p.id) === String(v));
+  return x ? `${x.community} ${x.layout} ${x.price}万（${x.district}）` : "不限，帮我推荐";
+}
+function agentText(v) {
+  const a = AGENTS.find(x => String(x.id) === String(v));
+  return a ? `${a.name}（${a.title}）` : "不限";
+}
+
+/* 组装飞书消息卡片 */
+function buildCard(d) {
+  const now = new Date();
+  const pad = n => String(n).padStart(2, "0");
+  const stamp = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  return {
+    msg_type: "interactive",
+    card: {
+      header: {
+        title: { tag: "plain_text", content: "🏠 新看房预约 · 滴水湖房产网" },
+        template: "blue"
+      },
+      elements: [
+        { tag: "div", fields: [
+          { is_short: true, text: { tag: "lark_md", content: "**姓名**\n" + d.name } },
+          { is_short: true, text: { tag: "lark_md", content: "**手机号**\n" + d.phone } },
+          { is_short: true, text: { tag: "lark_md", content: "**看房时间**\n" + d.date + " " + d.time } },
+          { is_short: true, text: { tag: "lark_md", content: "**意向房源**\n" + d.propertyText } }
+        ]},
+        { tag: "div", text: { tag: "lark_md", content: "**意向经纪人**：" + d.agentText + "\n**需求备注**：" + (d.remark || "无") } },
+        { tag: "hr" },
+        { tag: "note", elements: [{ tag: "plain_text", content: "提交时间：" + stamp + " ｜ 来源：滴水湖.cn" }] }
+      ]
+    }
+  };
+}
+
+async function pushToFeishu(data) {
+  const res = await fetch(FEISHU_WEBHOOK, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(buildCard(data))
+  });
+  if (!res.ok) throw new Error("HTTP " + res.status);
+  const json = await res.json();
+  if (json.code !== 0) throw new Error(json.msg || "飞书推送失败");
+  return true;
+}
+
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+  const d = new FormData(form);
+  const data = {
+    name: (d.get("name") || "").trim(),
+    phone: (d.get("phone") || "").trim(),
+    date: d.get("date") || "",
+    time: d.get("time") || "",
+    property: d.get("property") || "",
+    agent: d.get("agent") || "",
+    remark: (d.get("remark") || "").trim()
+  };
+  data.propertyText = propText(data.property);
+  data.agentText = agentText(data.agent);
+
+  let ok = true;
+  if (data.name.length < 2) { setError("name", "请输入姓名（至少2个字）"); ok = false; } else setError("name", "");
+  if (!/^1[3-9]\d{9}$/.test(data.phone)) { setError("phone", "请输入正确的 11 位手机号"); ok = false; } else setError("phone", "");
+  if (!data.date) { setError("date", "请选择看房日期"); ok = false; } else setError("date", "");
+  if (!data.time) { setError("time", "请选择看房时段"); ok = false; } else setError("time", "");
+  if (!ok) {
+    form.querySelector(".err:not(:empty)").closest(".form-group").querySelector(".form-control").focus();
+    return;
+  }
+
+  const btn = form.querySelector('button[type=submit]');
+  btn.disabled = true;
+  btn.textContent = "正在提交…";
+  try {
+    await pushToFeishu(data);
+    success.classList.add("show");
+    form.querySelectorAll("input,select,textarea").forEach(el => el.value = "");
+    setTimeout(() => success.scrollIntoView({ behavior: "smooth", block: "center" }), 50);
+  } catch (err) {
+    errorBox.classList.add("show");
+    errorBox.textContent = "⚠️ 自动提交失败（" + (err.message || "网络异常") + "）。请稍后重试，或直接拨打 021-5896-1888 完成预约。";
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "立即提交预约";
+  }
+});
+</script>
+</body>
+</html>

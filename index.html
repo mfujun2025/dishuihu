@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>滴水湖房产网 | 滴水湖.cn - 临港新片区专业房产中介 · 湖景房源精选</title>
+<meta name="description" content="滴水湖房产网（滴水湖.cn）专注上海临港新片区滴水湖周边二手房交易，提供滴水湖、临港主城区、芦潮港、南汇嘴在线房源查询、预约看房与政策咨询，8年深耕，1200+家庭信赖。">
+<meta name="keywords" content="滴水湖房产,滴水湖二手房,临港新片区房产,滴水湖租房,芦潮港买房,南汇嘴海景房,临港买房">
+</head>
+<body>
+<header id="site-header"></header>
+
+<!-- 英雄区 -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">🌊 滴水湖.cn ｜ 临港新片区专业房产中介</div>
+    <h1>安居滴水湖畔<br><em>临港置业首选平台</em></h1>
+    <p class="sub">深耕滴水湖周边 8 年，专注二手房买卖、湖景豪宅与滨海物业。海量真实房源，专业经纪人一对一服务，让安家临港更简单。</p>
+    <div class="hero-actions">
+      <a class="btn btn-gold" href="listings.html">查看在售房源</a>
+      <a class="btn btn-outline" style="background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.4)" href="booking.html">预约看房</a>
+    </div>
+    <div class="hero-stats" id="heroStats"></div>
+  </div>
+</section>
+
+<!-- 热门房源 -->
+<section class="section">
+  <div class="container">
+    <div class="block-head">
+      <div>
+        <h2>🔥 热门精选房源</h2>
+        <p>经纪人实地核验，真实在售，更新及时</p>
+      </div>
+      <a class="block-more" href="listings.html">查看全部房源 →</a>
+    </div>
+    <div class="house-grid" id="hotHouses"></div>
+  </div>
+</section>
+
+<!-- 区域介绍 -->
+<section class="section" style="background:linear-gradient(180deg,var(--lake-100),transparent)">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">DISTRICTS</div>
+      <h2>滴水湖周边四大置业板块</h2>
+      <p>从一线湖景房到滨海别墅，覆盖临港新片区全部热门置业区域</p>
+    </div>
+    <div class="district-grid" id="districtGrid"></div>
+  </div>
+</section>
+
+<!-- 数据统计 -->
+<section class="section" style="padding:36px 0">
+  <div class="container">
+    <div class="promise-grid">
+      <div class="promise-item"><div class="ic">🏠</div><h4>真实房源</h4><p>每套房源经经纪人实地核验，价格透明不虚报</p></div>
+      <div class="promise-item"><div class="ic">🛡️</div><h4>交易护航</h4><p>签约、贷款、过户全程代办，资金监管安全交易</p></div>
+      <div class="promise-item"><div class="ic">⏱️</div><h4>快速响应</h4><p>在线咨询1分钟响应，看房预约当天安排</p></div>
+      <div class="promise-item"><div class="ic">💸</div><h4>佣金透明</h4><p>收费明码标价，无隐形费用，成交价即实付价</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 经纪人 -->
+<section class="section">
+  <div class="container">
+    <div class="block-head">
+      <div>
+        <h2>🧑‍💼 金牌经纪人</h2>
+        <p>实名认证，持证上岗，平均从业 9 年以上</p>
+      </div>
+      <a class="block-more" href="stores.html">全部经纪人 →</a>
+    </div>
+    <div class="agent-grid" id="agentGrid"></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section" style="padding-top:0">
+  <div class="container">
+    <div class="cta-banner">
+      <div>
+        <h2>想买房？先问问专业经纪人</h2>
+        <p>留下您的需求，30 分钟内获取专属房源推荐与税费测算</p>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn btn-gold" href="booking.html">免费咨询</a>
+        <a class="btn btn-outline" style="background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.4)" href="contact.html">联系我们</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="site-footer"></footer>
+
+<script src="js/common.js"></script>
+<script>
+initPage("home");
+
+/* 统计数字 */
+document.getElementById("heroStats").innerHTML = STATS.map(s =>
+  `<div class="hs"><div class="num">${s.num}</div><div class="lbl">${s.label}</div></div>`).join("");
+
+/* 热门房源（featured，最多4套） */
+const hot = PROPERTIES.filter(p => p.featured).slice(0, 4);
+document.getElementById("hotHouses").innerHTML = hot.map(houseCardHtml).join("");
+
+/* 区域 */
+document.getElementById("districtGrid").innerHTML = DISTRICTS.map((d, i) => `
+  <a class="district-card" href="listings.html?district=${encodeURIComponent(d.link)}">
+    <div class="bg"></div>
+    <img src="${svgImage("lake-" + (i + 1), d.name, "置业板块")}" alt="${d.name}">
+    <div class="info">
+      <h3>${d.name}</h3>
+      <p>${d.desc}</p>
+      <div class="tags">${d.featured.map(t => `<i>${t}</i>`).join("")}</div>
+    </div>
+  </a>`).join("");
+
+/* 经纪人 */
+document.getElementById("agentGrid").innerHTML = AGENTS.map(agentCardHtml).join("");
+
+/* ---- 卡片渲染函数 ---- */
+function priceText(p) { return (p.price / 10000).toFixed(p.price >= 1000 ? 0 : 1) + "万"; }
+
+function houseCardHtml(p) {
+  const agent = AGENTS.find(a => a.id === p.agent);
+  return `
+  <a class="house-card" href="detail.html?id=${p.id}">
+    <div class="house-thumb">
+      <img src="${svgImage(p.images[0], p.community, p.layout)}" alt="${p.title}" loading="lazy">
+      <span class="house-badge ${p.tags[0].indexOf("湖") >= 0 || p.tags[0].indexOf("海") >= 0 ? "" : "blue"}">${p.tags[0]}</span>
+      <div class="house-price"><b>${p.price}万</b> <span class="unit">｜ 单价 ${p.unitPrice.toLocaleString()} 元/㎡</span></div>
+    </div>
+    <div class="house-body">
+      <div class="house-title">${p.title}</div>
+      <div class="house-meta">
+        <span>📐 ${p.area}㎡</span><span>🚪 ${p.layout}</span>
+        <span>🏢 ${p.floor}</span><span>🧭 ${p.orientation}</span>
+      </div>
+      <div class="house-tags">${p.tags.slice(0,3).map(t => `<i>${t}</i>`).join("")}</div>
+      <div class="house-foot">📍 ${p.district} ｜ ${agent ? agent.name : ""} ${agent ? agent.phone : ""}</div>
+    </div>
+  </a>`;
+}
+
+function agentCardHtml(a) {
+  const initials = a.name.slice(-2);
+  return `
+  <div class="agent-card">
+    <div class="agent-avatar">${initials}</div>
+    <h3>${a.name}</h3>
+    <div class="t">${a.title}</div>
+    <div class="stats"><span>🏅 ${a.rating} 分</span><span>📦 ${a.deals}</span></div>
+    <p class="bio">${a.bio}</p>
+    <div class="act">
+      <a class="btn btn-primary" style="padding:8px 16px;font-size:13px" href="booking.html?agent=${a.id}">咨询TA</a>
+    </div>
+  </div>`;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>门店与经纪人 | 滴水湖房产网 - 滴水湖.cn</title>
+<meta name="description" content="滴水湖房产旗下门店：滴水湖旗舰店、芦潮港服务中心、南汇嘴海景店；金牌经纪人团队实名认证、持证上岗，提供一对一置业服务。">
+</head>
+<body>
+<header id="site-header"></header>
+
+<div class="container">
+  <div class="breadcrumb"><a href="index.html">首页</a><span>/</span>门店与经纪人</div>
+</div>
+
+<!-- 门店介绍 -->
+<section class="section" style="padding-top:18px">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">OUR STORES</div>
+      <h2>三家门店 · 覆盖临港全域</h2>
+      <p>面朝滴水湖的临街旗舰店 + 成熟社区服务中心 + 滨海海景店，买房卖房就近服务</p>
+    </div>
+    <div class="store-grid" id="storeGrid"></div>
+  </div>
+</section>
+
+<!-- 服务承诺 -->
+<section class="section" style="padding-top:0">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">OUR SERVICE</div>
+      <h2>为什么选择滴水湖房产</h2>
+    </div>
+    <div class="promise-grid">
+      <div class="promise-item"><div class="ic">🔐</div><h4>资金监管</h4><p>房款走银行资金监管账户，过户完成才放款，交易零风险</p></div>
+      <div class="promise-item"><div class="ic">📝</div><h4>手续代办</h4><p>网签、贷款、过户、缴税一站式代办，省去您排队跑腿</p></div>
+      <div class="promise-item"><div class="ic">📊</div><h4>税费测算</h4><p>免费提供契税、增值税、个税测算，买房成本一目了然</p></div>
+      <div class="promise-item"><div class="ic">🎯</div><h4>需求匹配</h4><p>留下需求，经纪人按预算、通勤、学区精准匹配房源</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 经纪人团队 -->
+<section class="section" style="background:linear-gradient(180deg,var(--lake-100),transparent)">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">OUR AGENTS</div>
+      <h2>金牌经纪人团队</h2>
+      <p>实名认证 · 持证上岗 · 平均从业 9 年 · 累计成交 1170+ 套</p>
+    </div>
+    <div class="agent-grid" id="agentGrid"></div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="container">
+    <div class="cta-banner">
+      <div>
+        <h2>选好经纪人了吗？立即预约看房</h2>
+        <p>填写预约表单，经纪人 30 分钟内与您确认看房时间</p>
+      </div>
+      <a class="btn btn-gold" href="booking.html">预约看房</a>
+    </div>
+  </div>
+</section>
+
+<footer id="site-footer"></footer>
+
+<script src="js/common.js"></script>
+<script>
+initPage("stores");
+
+document.getElementById("storeGrid").innerHTML = STORES.map(s => `
+  <div class="store-card">
+    <div class="img"><img src="${svgImage(s.img, s.name, s.hours)}" alt="${s.name}"></div>
+    <div class="body">
+      <h3>${s.name}</h3>
+      <div class="addr">📍 ${s.address}</div>
+      <div class="info-line">📞 <a href="tel:${s.phone.replace(/-/g,"")}">${s.phone}</a></div>
+      <div class="info-line">🕐 ${s.hours}</div>
+      <div class="info-line">${s.desc}</div>
+      <div class="acts">
+        <a class="btn btn-primary" style="padding:8px 16px;font-size:13px" href="booking.html">预约看房</a>
+        <a class="btn btn-outline" style="padding:8px 16px;font-size:13px" href="contact.html">联系我们</a>
+      </div>
+    </div>
+  </div>`).join("");
+
+document.getElementById("agentGrid").innerHTML = AGENTS.map(a => `
+  <div class="agent-card">
+    <div class="agent-avatar">${a.name.slice(-2)}</div>
+    <h3>${a.name}</h3>
+    <div class="t">${a.title}</div>
+    <div class="stats">
+      <span>🏅 ${a.rating} 分</span>
+      <span>📦 ${a.deals}</span>
+      <span>⏳ ${a.experience}</span>
+    </div>
+    <p class="bio">${a.bio}</p>
+    <div style="font-size:12.5px;color:var(--ink-2);padding:0 16px">🎯 ${a.specialty} ｜ ${a.area}</div>
+    <div class="act">
+      <a class="btn btn-primary" style="padding:8px 16px;font-size:13px" href="booking.html?agent=${a.id}">咨询TA</a>
+      <a class="btn btn-outline" style="padding:8px 16px;font-size:13px" href="tel:${a.phone.replace(/-/g,"")}">电话</a>
+    </div>
+  </div>`).join("");
+</script>
+</body>
+</html>

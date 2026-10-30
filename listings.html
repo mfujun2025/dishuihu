@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>在售房源 | 滴水湖房产网 - 临港新片区二手房精选</title>
+<meta name="description" content="滴水湖周边在售二手房源，支持按价格、面积、户型、楼层、区域筛选，覆盖滴水湖、临港主城区、芦潮港、南汇嘴，真实在售，预约看房便捷。">
+</head>
+<body>
+<header id="site-header"></header>
+
+<div class="container">
+  <div class="breadcrumb"><a href="index.html">首页</a><span>/</span>在售房源</div>
+</div>
+
+<section class="section" style="padding-top:20px">
+  <div class="container">
+    <div class="listings-layout">
+      <!-- 筛选面板 -->
+      <aside class="filter-panel">
+        <h3>筛选条件 <span style="font-size:13px;color:var(--ink-3);font-weight:400">共 <b id="filterCount" style="color:var(--lake-700)">0</b> 套</span></h3>
+
+        <div class="filter-group">
+          <div class="fg-label">关键词</div>
+          <input type="text" id="fKeyword" placeholder="小区 / 标题 / 标签">
+        </div>
+
+        <div class="filter-group">
+          <div class="fg-label">区域板块</div>
+          <div class="filter-tags" id="fDistrict"></div>
+        </div>
+
+        <div class="filter-group">
+          <div class="fg-label">总价（万元）</div>
+          <div class="range-row">
+            <input type="number" id="fPriceMin" placeholder="最低" min="0">
+            <span>-</span>
+            <input type="number" id="fPriceMax" placeholder="最高" min="0">
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <div class="fg-label">面积（㎡）</div>
+          <div class="range-row">
+            <input type="number" id="fAreaMin" placeholder="最小" min="0">
+            <span>-</span>
+            <input type="number" id="fAreaMax" placeholder="最大" min="0">
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <div class="fg-label">户型</div>
+          <div class="filter-tags" id="fRooms"></div>
+        </div>
+
+        <div class="filter-group">
+          <div class="fg-label">楼层</div>
+          <div class="filter-tags" id="fFloor"></div>
+        </div>
+
+        <div class="filter-group" style="margin-bottom:8px">
+          <div class="fg-label">房源类型</div>
+          <select id="fType">
+            <option value="">不限</option>
+            <option value="住宅">住宅</option>
+            <option value="公寓">公寓</option>
+            <option value="复式">复式</option>
+            <option value="别墅">别墅</option>
+          </select>
+        </div>
+
+        <button class="filter-reset" id="fReset">重置全部筛选</button>
+      </aside>
+
+      <!-- 房源列表 -->
+      <main>
+        <div class="listings-top">
+          <div class="count">为您找到 <b id="totalCount">0</b> 套符合条件的房源</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:14px;color:var(--ink-2)">排序：</span>
+            <select class="sort-select" id="sortBy">
+              <option value="default">默认推荐</option>
+              <option value="price-asc">总价从低到高</option>
+              <option value="price-desc">总价从高到低</option>
+              <option value="area-asc">面积从小到大</option>
+              <option value="area-desc">面积从大到小</option>
+            </select>
+          </div>
+        </div>
+        <div class="house-grid" id="houseGrid"></div>
+        <div id="emptyBox" style="display:none">
+          <div class="empty-state">
+            <div class="big">🔍</div>
+            <p>没有找到符合条件的房源</p>
+            <p style="margin-top:8px"><a class="btn btn-primary" style="padding:8px 18px;font-size:14px" href="#" id="emptyReset">放宽筛选条件</a></p>
+          </div>
+        </div>
+        <div class="pagination" id="pagination"></div>
+        <div class="listings-cta">
+          没有找到心仪房源？<a href="booking.html">告诉经纪人您的需求</a>，30 分钟内为您推荐匹配房源。
+        </div>
+      </main>
+    </div>
+  </div>
+</section>
+
+<footer id="site-footer"></footer>
+
+<script src="js/common.js"></script>
+<script>
+initPage("listings");
+
+/* ---- 状态 ---- */
+const state = {
+  keyword: "", district: "", priceMin: null, priceMax: null,
+  areaMin: null, areaMax: null, rooms: null, floor: "", type: "",
+  sort: "default", page: 1, pageSize: 8
+};
+
+/* ---- 初始化筛选标签 ---- */
+const districts = ["滴水湖", "临港主城区", "芦潮港", "南汇嘴"];
+const roomOptions = [[1, "1室"], [2, "2室"], [3, "3室"], [4, "4室+"]];
+const floorOptions = [
+  ["低层", "低层"], ["中层", "中层"], ["高层", "高层"],
+  ["复式", "复式"], ["别墅", "独栋别墅"]
+];
+
+function tagGroup(container, options, valueKey, labelKey) {
+  container.innerHTML = `<button data-value="">不限</button>` +
+    options.map(o => `<button data-value="${o[valueKey]}" data-label="${o[labelKey]}">${o[labelKey]}</button>`).join("");
+}
+tagGroup(document.getElementById("fDistrict"), districts.map(d => [{ v: d, l: d }]), "v", "l");
+document.getElementById("fDistrict").querySelectorAll("button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.getElementById("fDistrict").querySelectorAll("button").forEach(b => b.classList.remove("on"));
+    btn.classList.add("on");
+    state.district = btn.dataset.value;
+    state.page = 1; render();
+  });
+});
+tagGroup(document.getElementById("fRooms"), roomOptions.map(r => [{ v: r[0], l: r[1] }]), "v", "l");
+document.getElementById("fRooms").querySelectorAll("button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.getElementById("fRooms").querySelectorAll("button").forEach(b => b.classList.remove("on"));
+    btn.classList.add("on");
+    state.rooms = btn.dataset.value ? parseInt(btn.dataset.value) : null;
+    state.page = 1; render();
+  });
+});
+tagGroup(document.getElementById("fFloor"), floorOptions.map(f => [{ v: f[1], l: f[1] }]), "v", "l");
+document.getElementById("fFloor").querySelectorAll("button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.getElementById("fFloor").querySelectorAll("button").forEach(b => b.classList.remove("on"));
+    btn.classList.add("on");
+    state.floor = btn.dataset.value;
+    state.page = 1; render();
+  });
+});
+
+/* ---- 输入框 ---- */
+const inputs = [
+  ["fKeyword", v => state.keyword = v.trim(), () => state.keyword],
+  ["fPriceMin", v => state.priceMin = v ? parseFloat(v) : null, () => state.priceMin],
+  ["fPriceMax", v => state.priceMax = v ? parseFloat(v) : null, () => state.priceMax],
+  ["fAreaMin", v => state.areaMin = v ? parseFloat(v) : null, () => state.areaMin],
+  ["fAreaMax", v => state.areaMax = v ? parseFloat(v) : null, () => state.areaMax],
+  ["fType", v => state.type = v, () => state.type]
+];
+inputs.forEach(([id, setter]) => {
+  const el = document.getElementById(id);
+  el.addEventListener("input", () => { setter(el.value); state.page = 1; render(); });
+});
+document.getElementById("sortBy").addEventListener("change", e => { state.sort = e.target.value; state.page = 1; render(); });
+document.getElementById("fReset").addEventListener("click", resetFilters);
+document.getElementById("emptyReset").addEventListener("click", e => { e.preventDefault(); resetFilters(); });
+
+function resetFilters() {
+  inputs.forEach(([id]) => document.getElementById(id).value = "");
+  document.querySelectorAll(".filter-tags").forEach(g => {
+    g.querySelectorAll("button").forEach(b => b.classList.remove("on"));
+    g.firstElementChild.classList.add("on");
+  });
+  Object.assign(state, { keyword: "", district: "", priceMin: null, priceMax: null, areaMin: null, areaMax: null, rooms: null, floor: "", type: "", sort: "default", page: 1 });
+  document.getElementById("sortBy").value = "default";
+  render();
+}
+
+/* ---- 过滤 ---- */
+function getFiltered() {
+  let list = PROPERTIES.slice();
+  if (state.keyword) {
+    const k = state.keyword.toLowerCase();
+    list = list.filter(p => (p.title + p.community + p.tags.join("") + p.desc).toLowerCase().includes(k));
+  }
+  if (state.district) list = list.filter(p => p.district === state.district);
+  if (state.priceMin != null) list = list.filter(p => p.price >= state.priceMin);
+  if (state.priceMax != null) list = list.filter(p => p.price <= state.priceMax);
+  if (state.areaMin != null) list = list.filter(p => p.area >= state.areaMin);
+  if (state.areaMax != null) list = list.filter(p => p.area <= state.areaMax);
+  if (state.rooms != null) list = list.filter(p => state.rooms === 4 ? p.rooms >= 4 : p.rooms === state.rooms);
+  if (state.floor) {
+    if (state.floor === "独栋别墅") list = list.filter(p => p.type === "别墅");
+    else if (state.floor === "复式") list = list.filter(p => p.type === "复式");
+    else list = list.filter(p => p.floor.indexOf(state.floor) >= 0);
+  }
+  if (state.type) list = list.filter(p => p.type === state.type);
+
+  if (state.sort === "price-asc") list.sort((a, b) => a.price - b.price);
+  if (state.sort === "price-desc") list.sort((a, b) => b.price - a.price);
+  if (state.sort === "area-asc") list.sort((a, b) => a.area - b.area);
+  if (state.sort === "area-desc") list.sort((a, b) => b.area - a.area);
+  if (state.sort === "default") list.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+  return list;
+}
+
+/* ---- 渲染 ---- */
+function render() {
+  const list = getFiltered();
+  const total = list.length;
+  document.getElementById("totalCount").textContent = total;
+  document.getElementById("filterCount").textContent = total;
+
+  const maxPage = Math.max(1, Math.ceil(total / state.pageSize));
+  if (state.page > maxPage) state.page = maxPage;
+  const pageList = list.slice((state.page - 1) * state.pageSize, state.page * state.pageSize);
+
+  const grid = document.getElementById("houseGrid");
+  const empty = document.getElementById("emptyBox");
+  if (total === 0) {
+    grid.innerHTML = "";
+    empty.style.display = "block";
+  } else {
+    empty.style.display = "none";
+    grid.innerHTML = pageList.map(houseCardHtml).join("");
+  }
+
+  /* 分页 */
+  const pag = document.getElementById("pagination");
+  if (maxPage <= 1) { pag.innerHTML = ""; return; }
+  let html = `<button ${state.page === 1 ? "disabled" : ""} data-p="${state.page - 1}">‹</button>`;
+  for (let i = 1; i <= maxPage; i++) {
+    html += `<button class="${i === state.page ? "on" : ""}" data-p="${i}">${i}</button>`;
+  }
+  html += `<button ${state.page === maxPage ? "disabled" : ""} data-p="${state.page + 1}">›</button>`;
+  pag.innerHTML = html;
+  pag.querySelectorAll("button").forEach(btn => btn.addEventListener("click", () => {
+    if (btn.disabled) return;
+    state.page = parseInt(btn.dataset.p);
+    render();
+    window.scrollTo({ top: 200, behavior: "smooth" });
+  }));
+}
+
+function houseCardHtml(p) {
+  const agent = AGENTS.find(a => a.id === p.agent);
+  return `
+  <a class="house-card" href="detail.html?id=${p.id}">
+    <div class="house-thumb">
+      <img src="${svgImage(p.images[0], p.community, p.layout)}" alt="${p.title}" loading="lazy">
+      <span class="house-badge ${p.tags[0].indexOf("湖") >= 0 || p.tags[0].indexOf("海") >= 0 ? "" : "blue"}">${p.tags[0]}</span>
+      <div class="house-price"><b>${p.price}万</b> <span class="unit">｜ 单价 ${p.unitPrice.toLocaleString()} 元/㎡</span></div>
+    </div>
+    <div class="house-body">
+      <div class="house-title">${p.title}</div>
+      <div class="house-meta">
+        <span>📐 ${p.area}㎡</span><span>🚪 ${p.layout}</span>
+        <span>🏢 ${p.floor}</span><span>🧭 ${p.orientation}</span>
+      </div>
+      <div class="house-tags">${p.tags.slice(0, 3).map(t => `<i>${t}</i>`).join("")}</div>
+      <div class="house-foot">📍 ${p.district} ｜ ${agent ? agent.name + " " + agent.phone : ""}</div>
+    </div>
+  </a>`;
+}
+
+/* ---- URL 参数预选 ---- */
+(function applyParams() {
+  const q = new URLSearchParams(location.search);
+  const set = (id, v) => { if (v) document.getElementById(id).value = v; };
+  set("fKeyword", q.get("keyword"));
+  set("fPriceMin", q.get("priceMin"));
+  set("fPriceMax", q.get("priceMax"));
+  set("fAreaMin", q.get("areaMin"));
+  set("fAreaMax", q.get("areaMax"));
+  if (q.get("district")) {
+    state.district = q.get("district");
+    const btn = [...document.getElementById("fDistrict").querySelectorAll("button")].find(b => b.dataset.value === q.get("district"));
+    if (btn) btn.click();
+  }
+  if (q.get("rooms")) {
+    const rooms = parseInt(q.get("rooms"));
+    state.rooms = rooms;
+    const btn = [...document.getElementById("fRooms").querySelectorAll("button")].find(b => parseInt(b.dataset.value) === rooms);
+    if (btn) btn.click();
+  }
+  if (q.get("floor")) {
+    state.floor = q.get("floor");
+    const btn = [...document.getElementById("fFloor").querySelectorAll("button")].find(b => b.dataset.value === q.get("floor"));
+    if (btn) btn.click();
+  }
+  set("fType", q.get("type"));
+})();
+
+render();
+</script>
+</body>
+</html>

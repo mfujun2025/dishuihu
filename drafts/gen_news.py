@@ -383,16 +383,15 @@ document.getElementById("heroImg").src = svgImage("{hero}", "资讯", "{cat}");
 
 navs = []
 for i, a in enumerate(articles):
+    left = '<span></span>'
     if i > 0:
         prev = articles[i - 1]
-        navs.append(f'<a href="../articles/{prev["slug"]}.html">← 上一篇：{prev["title"]}</a>')
-    else:
-        navs.append('<span></span>')
+        left = f'<a href="../articles/{prev["slug"]}.html">← 上一篇：{prev["title"]}</a>'
+    right = '<span></span>'
     if i < len(articles) - 1:
         nxt = articles[i + 1]
-        navs.append(f'<a href="../articles/{nxt["slug"]}.html">下一篇：{nxt["title"]} →</a>')
-    else:
-        navs.append('<span></span>')
+        right = f'<a href="../articles/{nxt["slug"]}.html">下一篇：{nxt["title"]} →</a>'
+    navs.append(left + right)
 
 for a, nav in zip(articles, navs):
     html = TPL.format(site=SITE, **a, nav=nav)
